@@ -12,6 +12,7 @@ class UserController {
         $name = '';
         $email = '';
         $password = '';
+        $result = false;
 
         if (isset($_POST['lets_reg'])) {
 
@@ -32,8 +33,8 @@ class UserController {
             if (!User::checkEmail($email)) {
                 $errors[] = "Email не валидный";
             }
-            
-            if(User::checkEmailExists($email)){
+
+            if (User::checkEmailExists($email)) {
                 $errors[] = "Такой email уже используется";
             }
 
@@ -44,6 +45,43 @@ class UserController {
 
         require_once ROOT . '/views/user/register.php';
 
+        return true;
+    }
+
+    public function actionLogin() {
+
+        $email = '';
+        $password = '';
+
+        if (isset($_POST['lets_login'])) {
+            $email = filter_input(INPUT_POST,'email');
+            $password = filter_input(INPUT_POST,'password');
+            $errors = false;
+            //Валидация полей
+            if (!User::checkEmail($email)) {
+                $errors[] = "Неправильный email";
+            }
+
+            if (!User::checkPassword($password)) {
+                $errors[] = "Пароль не должен быть короче 6-ти символов";
+            }
+
+            //Проверяем существует ли пользователь
+            $userId = User::checkUserData($email, $password);
+
+            if ($userId == false) {
+                //Если данные неправильные - показать ошибку
+                $errors[] = "Неправильные данные для входа";
+            } else {
+                //если данные правильные - записываем пользователя в сессию
+                User::auth($userId);
+                
+                //Перенаправляем пользователя в закрытую часть
+                header('Location: /cabinet/');
+            }
+        }
+        require_once ROOT . '/views/user/login.php';
+        
         return true;
     }
 
