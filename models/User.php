@@ -7,20 +7,50 @@
  */
 class User {
 
+    /**
+     * Записываем пользователя в БД 
+     * @param string $name
+     * @param string $password
+     * @param string $email
+     * @return boolean
+     */
     public static function register($name, $password, $email) {
-        
+
         $db = Db::getConnection();
-        
+
         $sql = 'INSERT INTO user (name, password, email) '
                 . 'VALUES (:name, :password, :email)';
-        
+
         $result = $db->prepare($sql);
-        
+
         $result->bindParam(':name', $name, PDO::PARAM_STR);
         $result->bindParam(':password', $password, PDO::PARAM_STR);
         $result->bindParam(':email', $email, PDO::PARAM_STR);
+
+        return $result->execute();
+    }
+    
+    /**
+     * редактирование данных пользователя
+     * @param string $userId
+     * @param string $name
+     * @param string $password
+     * @return boolean
+     */
+    public static function edit($userId, $name, $password) {
+        
+        $db = Db::getConnection();
+        
+        $sql = "UPDATE user"
+                . " SET name = :name, password = :password"
+                . " WHERE id = :id";
+        $result = $db->prepare($sql);
+        $result->bindParam('id', $userId, PDO::PARAM_INT);
+        $result->bindParam('name', $name, PDO::PARAM_STR);
+        $result->bindParam('password', $password, PDO::PARAM_STR);
         
         return $result->execute();
+        
     }
 
     /**
@@ -78,50 +108,104 @@ class User {
             return true;
         return false;
     }
-    
+
     /**
      * Проверяем существует ли пользователь с заданными $email и $password
      * @param string $email
      * @param string $password
      * @return mised: integer user id or false
      */
-    public static function checkUserData($email, $password){
-        
+    public static function checkUserData($email, $password) {
+
         $db = Db::getConnection();
-        
+
         $sql = "SELECT * FROM user WHERE email = :email AND password = :password";
-        
+
         $result = $db->prepare($sql);
         $result->bindParam(':email', $email, PDO::PARAM_STR);
         $result->bindParam(':password', $password, PDO::PARAM_STR);
         $result->execute();
-        
+
         $user = $result->fetch();
-        if($user){
+        if ($user) {
             return $user['id'];
         }
-        
-        return false;        
+
+        return false;
     }
-    
+
     /**
      * Запоминаем пользователя
      * @param integer $userId
      */
-    public static function auth($userId){
-        session_start();
+    public static function auth($userId) {
+
         $_SESSION['user'] = $userId;
     }
-    
-    public static function checkLogged(){
-        
-        session_start();
+
+    /**
+     * Проверяем залогинилася ли пользователь, если да,
+     *  то возвращаем идентификатор
+     * @return mixed: bollean or redirection
+     */
+    public static function checkLogged() {
+
         //Если сессия есть - вернем идентификатор поользователя
-        if(isset($_SESSION['user'])){
+        if (isset($_SESSION['user'])) {
             return $_SESSION['user'];
-        }else{
-            header('Location: /user/login');       
+        } else {
+            header('Location: /user/login');
         }
     }
+
+    /**
+     * Проверяем наличие сессии пользователя,
+     * для правильного отображения кнопок
+     * управления кабинетом
+     * @return boolean
+     */
+    public static function isGuest() {
+
+        if (isset($_SESSION['user'])) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Почаем id, name, password пользователя
+     * @param int $id
+     * @return array
+     */
+    public static function getUserById($id) {
+
+        if ($id) {
+
+            $db = Db::getConnection();
+
+            $sql = "SELECT id, name, password FROM user WHERE id = :id";
+
+            $result = $db->prepare($sql);
+            $result->bindParam(':id', $id, PDO::PARAM_INT);
+            $result->setFetchMode(PDO::FETCH_ASSOC);
+            $result->execute();
+
+            return $result->fetch();
+        }
+    }
+
+    /**
+     * Сравнивает два пароля
+     * @param string $first
+     * @param string $second
+     * @return boolean
+     */
+    public static function passwordMatch($first, $second) {
+
+        if ($first === $second) {
+            return true;
+        }
+        return false;
+    }    
 
 }
