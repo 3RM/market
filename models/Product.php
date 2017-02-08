@@ -56,10 +56,10 @@ class Product {
 
     public static function getProductsListByCategory($categoryId = false, $page = 1) {
 
-        if ($categoryId) {            
+        if ($categoryId) {
 
             $offset = ((int) $page - 1) * self::SHOW_BY_DEFAULT;
-           
+
             $db = Db::getConnection();
             $products = array();
             $result = $db->query("SELECT id, name, price, image, is_new FROM product "
@@ -92,6 +92,30 @@ class Product {
         $row = $result->fetch();
 
         return $row['count'];
+    }
+
+    public static function getProductsByIds($idsArray) {
+        
+        $products = array();
+
+        $db = Db::getConnection();
+        
+        $idsString = implode(',',$idsArray);
+
+        $sql = "SELECT * FROM product WHERE status = '1' AND id IN ($idsString)";
+
+        $result = $db->query($sql);
+        $result->setFetchMode(PDO::FETCH_ASSOC);
+
+        $i = 0;
+        while ($row = $result->fetch()) {
+            $products[$i]['id'] = $row['id'];
+            $products[$i]['code'] = $row['code'];
+            $products[$i]['name'] = $row['name'];
+            $products[$i]['price'] = $row['price'];
+            $i++;
+        }
+        return $products;
     }
 
 }

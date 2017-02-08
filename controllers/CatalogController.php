@@ -20,7 +20,7 @@ class CatalogController {
         $latestProducts = Product::getLatestProducts(6);
 
         require_once ROOT . '/views/catalog/index.php';
-
+        
         return true;
     }
 
