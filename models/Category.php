@@ -5,15 +5,13 @@
  *
  * @author rodnoy
  */
-class Category {
+class Category extends Db{
 
     public static function getCategoriesList() {
 
-        $db = Db::getConnection();
-
         $categoryList = array();
 
-        $result = $db->query('SELECT id, name FROM category '
+        $result = self::getConnection()->query('SELECT id, name FROM category '
                 . 'ORDER BY sort_order ASC');
 
         $i = 0;

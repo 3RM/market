@@ -5,7 +5,7 @@
  *
  * @author rodnoy
  */
-class User {
+class User extends Db{
 
     /**
      * Записываем пользователя в БД 
@@ -16,12 +16,10 @@ class User {
      */
     public static function register($name, $password, $email) {
 
-        $db = Db::getConnection();
-
         $sql = 'INSERT INTO user (name, password, email) '
                 . 'VALUES (:name, :password, :email)';
 
-        $result = $db->prepare($sql);
+        $result = self::getConnection()->prepare($sql);
 
         $result->bindParam(':name', $name, PDO::PARAM_STR);
         $result->bindParam(':password', $password, PDO::PARAM_STR);
@@ -39,12 +37,10 @@ class User {
      */
     public static function edit($userId, $name, $password) {
         
-        $db = Db::getConnection();
-        
         $sql = "UPDATE user"
                 . " SET name = :name, password = :password"
                 . " WHERE id = :id";
-        $result = $db->prepare($sql);
+        $result = self::getConnection()->prepare($sql);
         $result->bindParam('id', $userId, PDO::PARAM_INT);
         $result->bindParam('name', $name, PDO::PARAM_STR);
         $result->bindParam('password', $password, PDO::PARAM_STR);
@@ -96,11 +92,9 @@ class User {
      */
     public static function checkEmailExists($email) {
 
-        $db = Db::getConnection();
-
         $sql = "SELECT count(*) FROM user WHERE email = :email";
 
-        $result = $db->prepare($sql);
+        $result = self::getConnection()->prepare($sql);
         $result->bindParam(':email', $email, PDO::PARAM_STR);
         $result->execute();
 
@@ -117,11 +111,9 @@ class User {
      */
     public static function checkUserData($email, $password) {
 
-        $db = Db::getConnection();
-
         $sql = "SELECT * FROM user WHERE email = :email AND password = :password";
 
-        $result = $db->prepare($sql);
+        $result = self::getConnection()->prepare($sql);
         $result->bindParam(':email', $email, PDO::PARAM_STR);
         $result->bindParam(':password', $password, PDO::PARAM_STR);
         $result->execute();
@@ -181,11 +173,9 @@ class User {
 
         if ($id) {
 
-            $db = Db::getConnection();
-
             $sql = "SELECT id, name, password FROM user WHERE id = :id";
 
-            $result = $db->prepare($sql);
+            $result = self::getConnection()->prepare($sql);
             $result->bindParam(':id', $id, PDO::PARAM_INT);
             $result->setFetchMode(PDO::FETCH_ASSOC);
             $result->execute();
