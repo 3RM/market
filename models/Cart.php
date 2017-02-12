@@ -6,7 +6,7 @@
  * @author rodnoy
  */
 class Cart {
-    
+
     /**
      * Добавление товара в корзину
      * @param string $id
@@ -28,10 +28,10 @@ class Cart {
         }
 
         $_SESSION['products'] = $productsInCart;
-        
+
         return self::countItems();
     }
-    
+
     /**
      * Подсчет количества товаров в корзине (в сессии)
      * @return int
@@ -47,30 +47,61 @@ class Cart {
             return 0;
         }
     }
-    
-    public static function getProducts(){
-        
-        if($_SESSION['products']){
+
+    public static function getProducts() {
+
+        if ($_SESSION['products']) {
             return $_SESSION['products'];
-        }else{
+        } else {
             return false;
         }
-        
     }
-    
-    public static function getTotalPrice($products){
-        
+
+    public static function getTotalPrice($products) {
+
         $productsInCart = self::getProducts();
-        
+
         $total = 0;
-        
-        if($productsInCart){
-            foreach($products as $item){
+
+        if ($productsInCart) {
+            foreach ($products as $item) {
                 $total += $item['price'] * $productsInCart[$item['id']];
             }
         }
-        
+
         return $total;
+    }
+    
+     /**
+     * Очищает корзину
+     */
+    public static function clear() {
+        if (isset($_SESSION['products'])) {
+            unset($_SESSION['products']);
+            //После выполнения unset массив products удалится и появится ошибка,
+            //что переменной products не существует в представлении /views/cart/index/php
+            //поэтому нужно после unset присвоить products пустой массив
+            $_SESSION['products'] = array();
+        }
+    }
+
+    /**
+     * Удаляет товар с указанным id из корзины
+     * @param integer $id <p>id товара</p>
+     */
+    public static function deleteItemFromCart($id) {
+
+        if (isset($_SESSION['products'])) {
+            
+            $productsInCart = self::getProducts();
+
+            if (array_key_exists($id, $productsInCart)) {
+                unset($productsInCart[$id]);
+
+                $_SESSION['products'] = $productsInCart;
+            }
+        }
+        return $productsInCart;
     }
 
 }

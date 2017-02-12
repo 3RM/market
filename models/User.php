@@ -5,7 +5,7 @@
  *
  * @author rodnoy
  */
-class User extends Db{
+class User extends Db {
 
     /**
      * Записываем пользователя в БД 
@@ -27,7 +27,7 @@ class User extends Db{
 
         return $result->execute();
     }
-    
+
     /**
      * редактирование данных пользователя
      * @param string $userId
@@ -36,7 +36,7 @@ class User extends Db{
      * @return boolean
      */
     public static function edit($userId, $name, $password) {
-        
+
         $sql = "UPDATE user"
                 . " SET name = :name, password = :password"
                 . " WHERE id = :id";
@@ -44,9 +44,8 @@ class User extends Db{
         $result->bindParam('id', $userId, PDO::PARAM_INT);
         $result->bindParam('name', $name, PDO::PARAM_STR);
         $result->bindParam('password', $password, PDO::PARAM_STR);
-        
+
         return $result->execute();
-        
     }
 
     /**
@@ -62,9 +61,9 @@ class User extends Db{
     }
 
     /**
-     * Проверяет пароль: не меньше, чем 6 символов
-     * @param string $password
-     * @return boolean
+     * Проверяет имя: не меньше, чем 6 символов
+     * @param string $password <p>Пароль</p>
+     * @return boolean <p>Результат выполнения метода</p>
      */
     public static function checkPassword($password) {
         if (strlen($password) >= 6) {
@@ -75,11 +74,23 @@ class User extends Db{
 
     /**
      * Проверяет email
-     * @param string $email
-     * @return boolean
+     * @param string $email <p>E-mail</p>
+     * @return boolean <p>Результат выполнения метода</p>
      */
     public static function checkEmail($email) {
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Проверяет телефон: не меньше, чем 10 символов
+     * @param string $phone <p>Телефон</p>
+     * @return boolean <p>Результат выполнения метода</p>
+     */
+    public static function checkPhone($phone) {
+        if (strlen($phone) >= 10) {
             return true;
         }
         return false;
@@ -138,7 +149,7 @@ class User extends Db{
     /**
      * Проверяем залогинилася ли пользователь, если да,
      *  то возвращаем идентификатор
-     * @return mixed: bollean or redirection
+     * @return mixed: integer or redirection
      */
     public static function checkLogged() {
 
@@ -196,6 +207,6 @@ class User extends Db{
             return true;
         }
         return false;
-    }    
+    }
 
 }
