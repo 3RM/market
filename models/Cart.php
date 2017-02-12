@@ -71,8 +71,8 @@ class Cart {
 
         return $total;
     }
-    
-     /**
+
+    /**
      * Очищает корзину
      */
     public static function clear() {
@@ -92,15 +92,17 @@ class Cart {
     public static function deleteItemFromCart($id) {
 
         if (isset($_SESSION['products'])) {
-            
+            //Получим идентификаторы и количество товаров в корзине 
             $productsInCart = self::getProducts();
-
+            //Ищем совпадение переданого id в массиве
             if (array_key_exists($id, $productsInCart)) {
+                //Если найден id - удаляем
                 unset($productsInCart[$id]);
-
+                //Перезаписываем новый массив продуктов в сессию
                 $_SESSION['products'] = $productsInCart;
             }
         }
+
         return $productsInCart;
     }
 

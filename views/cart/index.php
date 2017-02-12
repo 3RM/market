@@ -20,7 +20,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-sm-9 padding-right">
                 <div class="features_items">
                     <h2 class="title text-center">Корзина</h2>
@@ -36,19 +36,24 @@
                                 <th>Удалить</th>
                             </tr>
                             <?php foreach ($products as $product): ?>
-                                <tr>
+                            <tr class="text-center">
                                     <td><?= $product['code']; ?></td>
                                     <td>
                                         <a href="/product/<?= $product['id']; ?>"><?= $product['name']; ?></a>
                                     </td>
                                     <td><?= $product['price']; ?></td>
                                     <td><?= $productsInCart[$product['id']]; ?></td>
-                                    <td><a href="/cart/delete/<?= $product['id']; ?>">Удалить</a></td>
+                                    <td>
+                                        <a href="/cart/delete/<?= $product['id']; ?>">
+                                            <img src="/template/images/delete_icon.png" width="30" 
+                                                 height="30" alt="Удалить">
+                                        </a>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                             <tr>
                                 <td colspan="3">Общая стоимость:</td>
-                                <td><?= $totalPrice; ?></td>
+                                <td class="text-center"><?= $totalPrice; ?></td>
                             </tr>
                         </table>
                         <a class="btn btn-default checkout" href="/cart/checkout"><i class="fa fa-shopping-cart"></i> Оформить заказ</a>

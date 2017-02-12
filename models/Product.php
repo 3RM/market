@@ -103,5 +103,31 @@ class Product extends Db{
         }
         return $products;
     }
+    
+    /**
+     * Возвращает список рекомендуемых товаров
+     * @return array <p>Массив с товарами</p>
+     */
+    public static function getRecommendedProductList(){
+        
+        $products = array();
+        
+        $sql = "SELECT * FROM product WHERE status = '1' AND "
+                . "is_recommended = '1'";
+        
+        $result = self::getConnection()->query($sql);
+        $result->setFetchMode(PDO::FETCH_ASSOC);
+        
+        $i = 0;
+        while($row = $result->fetch()){
+            $products[$i]['id'] = $row['id'];
+            $products[$i]['image'] = $row['image'];
+            $products[$i]['name'] = $row['name'];
+            $products[$i]['price'] = $row['price'];
+            $products[$i]['is_new'] = $row['is_new'];
+            $i++;
+        }
+        return $products;
+    }
 
 }
