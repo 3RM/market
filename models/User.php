@@ -184,7 +184,7 @@ class User extends Db {
 
         if ($id) {
 
-            $sql = "SELECT id, name, password FROM user WHERE id = :id";
+            $sql = "SELECT id, name, password, role FROM user WHERE id = :id";
 
             $result = self::getConnection()->prepare($sql);
             $result->bindParam(':id', $id, PDO::PARAM_INT);
