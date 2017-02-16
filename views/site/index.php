@@ -26,7 +26,7 @@
                             <div class="product-image-wrapper">
                                 <div class="single-products">
                                     <div class="productinfo text-center">
-                                        <img src="/template/images/home/product1.jpg" alt="" />
+                                        <img src="<?= Product::getImage($product['id']); ?>" width="150" height="230" alt="" />
                                         <h2><?= $product['price'] ?>$</h2>
                                         <a href="product/<?= $product['id'] ?>"><p><?= $product['name'] ?> ID: <?= $product['id'] ?></p></a>
                                         <a href="/cart/add/<?= $product['id'] ?>" data-id="<?= $product['id'] ?>" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>В корзину</a>
@@ -58,7 +58,7 @@
                                 <div class="product-image-wrapper">
                                     <div class="single-products">
                                         <div class="productinfo text-center">
-                                            <img src="/template/images/home/product1.jpg" alt=""/>                                            
+                                            <img src="<?= Product::getImage($sliderItem['id']); ?>" width="100" height="170" alt="" />
                                             <h2><?php echo $sliderItem['price']; ?>$</h2>
                                             <a href="/product/<?php echo $sliderItem['id']; ?>">
                                                 <?php echo $sliderItem['name']; ?>

@@ -50,6 +50,7 @@
                         <input type="text" name="brand" placeholder="" value="<?= $product['brand']; ?>">
 
                         <p>Изображение товара</p>
+                        <img src="<?= Product::getImage($product['id']); ?>" width="200" alt="" />
                         <input type="file" name="image" placeholder="" value="">
 
                         <p>Детальное описание</p>

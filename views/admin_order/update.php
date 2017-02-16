@@ -44,7 +44,7 @@
                         </select>
                         <br>
                         <br>
-                        <input type="submit" name="submit" class="btn btn-default" value="Сохранить">
+                        <input type="submit" name="update" class="btn btn-default" value="Сохранить">
                     </form>
                 </div>
             </div>

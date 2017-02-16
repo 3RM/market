@@ -294,5 +294,30 @@ class Product extends Db {
 
         return $row['id'];
     }
+    
+    /**
+     * Возвращает путь к изображению
+     * @param int $id <p>id продукта</p>
+     * @return string <p>Путь к изображению</p>
+     */
+    public static function getImage($id){
+        
+        //Название изображения, если его нет
+        $noImage = 'http://tour-fly.com/uploadedFiles/images/tourfly/no_photo.gif';
+        
+        //Путь к папке с изображениями
+        $folderPath = '/upload/images/products/';
+        
+        //путь к изображению товара
+        $imagePath = $folderPath.$id.'.jpg';
+        
+        if(file_exists($_SERVER['DOCUMENT_ROOT'].$imagePath)){
+            //если изображения для товара существует
+            //возвращаем путь к изображению товара
+            return $imagePath;
+        }
+        //если изображения не существует, возвращаем фото-заглушку
+        return $noImage;
+    }
 
 }
