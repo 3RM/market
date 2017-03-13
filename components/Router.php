@@ -72,7 +72,10 @@ class Router {
                 //то обрываем foreach (поиск контроллеров и методов)
                 if ($result != null) {
                     break;
-                }
+                }elseif($result == false){
+                    require_once ROOT . '/views/404.php';
+                    //break;
+                }                
             }
         }
     }

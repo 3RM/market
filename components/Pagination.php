@@ -163,6 +163,12 @@ class Pagination {
     private function setCurrentPage($currentPage) {
         # Получаем номер страницы
         $this->current_page = $currentPage;
+        
+        # Если пользователь введете в url не существующую страницу
+        if($this->current_page > $this->amount()){
+            require_once ROOT . '/views/404.php';
+            die;
+        }
 
         # Если текущая страница больше нуля
         if ($this->current_page > 0) {
